@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import { useState } from "react";
+import { ChatProvider } from "@/context/ChatContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -15,9 +16,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      <Toaster position="top-center" />
-    </QueryClientProvider>
+   <QueryClientProvider client={queryClient}>
+  <ChatProvider>{children}</ChatProvider>
+  <Toaster position="top-center" />
+</QueryClientProvider>
   );
 }

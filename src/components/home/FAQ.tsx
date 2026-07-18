@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "@gravity-ui/icons";
+import { fadeUp, staggerContainer, viewport, EASE } from "@/lib/motion";
 
 const FAQS = [
   { q: "How does the AI concierge work?", a: "Tell it your budget, dates, or travel style in plain language. It searches our real trip catalog and recommends matching trips with direct links — it never invents trips that don't exist." },
@@ -17,30 +19,69 @@ export function FAQ() {
   return (
     <section className="bg-slate-50 py-16 md:py-20">
       <div className="mx-auto max-w-3xl px-4">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-extrabold text-slate-900">Frequently asked questions</h2>
-        </div>
-        <div className="space-y-3">
-          {FAQS.map((f, i) => (
-            <div key={f.q} className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-              <button
-                onClick={() => setOpen(open === i ? null : i)}
-                className="flex w-full cursor-pointer items-center justify-between p-4 text-left text-sm font-semibold text-slate-900"
-                aria-expanded={open === i}
+        <motion.div
+          className="mb-10 text-center"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+        >
+          <p className="text-xs font-bold uppercase tracking-widest text-secondary">Questions</p>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">
+            Frequently asked questions
+          </h2>
+        </motion.div>
+
+        <motion.div
+          className="space-y-3"
+          variants={staggerContainer(0.06)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+        >
+          {FAQS.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <motion.div
+                key={f.q}
+                variants={fadeUp}
+                className="overflow-hidden rounded-2xl border border-slate-200 bg-white transition-shadow duration-200"
+                style={{ boxShadow: isOpen ? "0 4px 20px -4px rgba(15,23,42,0.08)" : "none" }}
               >
-                {f.q}
-                <ChevronDown
-                  className={`h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200 ${open === i ? "rotate-180" : ""}`}
-                />
-              </button>
-              {open === i && (
-                <p className="border-t border-slate-100 p-4 text-sm leading-relaxed text-slate-600">
-                  {f.a}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+                <button
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  className="flex w-full cursor-pointer items-center justify-between p-4 text-left text-sm font-semibold text-slate-900"
+                  aria-expanded={isOpen}
+                >
+                  {f.q}
+                  <motion.span
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.25, ease: EASE }}
+                    className="ml-3 shrink-0 text-slate-400"
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </motion.span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="content"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: EASE }}
+                      className="overflow-hidden"
+                    >
+                      <p className="border-t border-slate-100 p-4 text-sm leading-relaxed text-slate-600">
+                        {f.a}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );

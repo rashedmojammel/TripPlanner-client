@@ -1,4 +1,8 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { Star } from "@gravity-ui/icons";
+import { fadeUp, staggerContainer, viewport } from "@/lib/motion";
 
 const REVIEWS = [
   {
@@ -21,28 +25,53 @@ const REVIEWS = [
 export function Testimonials() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 md:py-20">
-      <div className="mb-10 text-center">
-        <h2 className="text-3xl font-extrabold text-slate-900">What travelers say</h2>
+      <motion.div
+        className="mb-10 text-center"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        <p className="text-xs font-bold uppercase tracking-widest text-secondary">Community</p>
+        <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">What travelers say</h2>
         <p className="mt-2 text-slate-500">Real experiences from our community</p>
-      </div>
-      <div className="grid gap-6 md:grid-cols-3">
+      </motion.div>
+
+      <motion.div
+        className="grid gap-6 md:grid-cols-3"
+        variants={staggerContainer(0.1)}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
         {REVIEWS.map((r) => (
-          <figure key={r.name} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <motion.figure
+            key={r.name}
+            variants={fadeUp}
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.25 }}
+            className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+          >
             <div className="flex gap-0.5 text-secondary">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="h-4 w-4" />
               ))}
             </div>
             <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">
-              "{r.text}"
+              &ldquo;{r.text}&rdquo;
             </blockquote>
-            <figcaption className="mt-4 border-t border-slate-100 pt-3">
-              <p className="text-sm font-bold text-slate-900">{r.name}</p>
-              <p className="text-xs text-slate-400">{r.location}</p>
+            <figcaption className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                {r.name.charAt(0)}
+              </span>
+              <div>
+                <p className="text-sm font-bold text-slate-900">{r.name}</p>
+                <p className="text-xs text-slate-400">{r.location}</p>
+              </div>
             </figcaption>
-          </figure>
+          </motion.figure>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -7,20 +7,25 @@ import { ChatMessageBubble } from "./ChatMessage";
 import { SuggestedPrompts } from "./SuggestedPrompts";
 import { Comment, Xmark, PaperPlane } from "@gravity-ui/icons";
 import { TypingIndicator } from "./TypingIndicator";
+ import { useChatContext } from "@/context/ChatContext";
 
 export function ChatWidget() {
-  const [open, setOpen] = useState(false);
+
+// replace: const [open, setOpen] = useState(false);
+const { open, setOpen, pendingPrompt, consumePrompt } = useChatContext();
   const [input, setInput] = useState("");
   const { messages, isTyping, send } = useChat();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // auto-scroll to newest message
   useEffect(() => {
-    scrollRef.current?.scrollTo({
-      top: scrollRef.current.scrollHeight,
-      behavior: "smooth",
-    });
-  }, [messages, isTyping, open]);
+  if (open && pendingPrompt) {
+    const p = consumePrompt();
+    if (p) send(p);
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [open, pendingPrompt]);
+
 
   function handleSend() {
     if (!input.trim()) return;

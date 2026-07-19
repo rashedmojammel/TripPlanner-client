@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TripPlanner — AI-Powered Travel Platform (Frontend)
 
-## Getting Started
+Discover curated trips across Bangladesh and beyond, with an AI travel concierge that recommends real trips from the catalog and an AI writing assistant that generates trip listings.
 
-First, run the development server:
+**🌐 Live Site:** https://trip-planner-client-navy.vercel.app
+**🔗 Backend API:** https://tripplanner-server-tclz.onrender.com
+**📦 Backend Repository:** https://github.com/rashedmojammel/TripPlanner-Server
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+> ⏳ **Note for reviewers:** The backend runs on Render's free tier and sleeps after inactivity. The **first request may take 30–60 seconds** to wake the server — please open the site and wait a moment before testing.
+
+---
+
+## Demo Credentials
+
+| Field | Value |
+|---|---|
+| Email | `demo@tripplanner.com` |
+| Password | `Demo1234!` |
+
+Or simply click the **"✨ Try Demo Account"** button on the login page — it auto-fills and signs in. Google login is also supported.
+
+---
+
+## Key Features
+
+### Core Platform
+- **Landing page** — 65vh hero with live search CTA, 7 sections (Popular Destinations, How It Works, Categories, Statistics with Recharts, Testimonials, FAQ, Newsletter + CTA), full footer
+- **Explore page** — debounced search, filtering by category and price range, 4 sorting options, pagination; all filter state lives in the URL (shareable links)
+- **Details page** — public, hero image, overview, key information panel, related trips
+- **Protected pages** — `/items/add` (create trip) and `/items/manage` (table with View/Delete + confirm modal); logged-out users are redirected to `/login`
+- **Authentication** — Better Auth with email/password, Google social login, demo auto-fill button, react-hook-form + zod inline validation, session cookies
+- **Roles** — traveler / organizer chosen at registration (admin supported via Better Auth admin plugin)
+- **Dark mode** — theme toggle with persistence (next-themes)
+- **Fully responsive** — mobile, tablet, desktop
+
+### Agentic AI Features
+1. **AI Travel Concierge (Chat Assistant)** — a two-step agent pipeline: a fast LLM extracts structured filters from the user's message → the backend queries MongoDB for matching trips (tool use) → a larger LLM answers grounded in the real catalog with clickable links to trip pages. Streaming responses, conversation history, suggested prompts, typing indicator. Never invents trips.
+2. **AI Listing Writer (Content Generator)** — organizers enter destination, duration, and category; the AI generates the title, short description, and full description with selectable tone (exciting/relaxing/luxurious/budget-friendly) and length (short/medium/long), plus one-click regenerate. All output is editable.
+3. **"Ask AI about this trip"** — every details page can open the concierge pre-seeded with a question about that specific trip.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js (App Router) + TypeScript |
+| Styling | Tailwind CSS v4 + HeroUI v3 |
+| Data fetching | TanStack Query + Axios |
+| Auth client | Better Auth (React client) |
+| Forms | react-hook-form + zod |
+| Charts | Recharts |
+| Animation | Framer Motion |
+| Icons | Gravity UI Icons |
+| Theming | next-themes |
+| Deployment | Vercel |
+
+---
+
+## Environment Variables
+
+Create `.env.local` in the project root:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+In production (Vercel dashboard), set the same variable to the deployed backend URL, e.g. `https://tripplanner-server-tclz.onrender.com/api`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Run Locally
 
-## Learn More
+```bash
+# 1. Clone
+git clone <this-repo-url>
+cd tripplanner-client
 
-To learn more about Next.js, take a look at the following resources:
+# 2. Install
+npm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 3. Configure
+#    create .env.local as shown above
+#    (the backend must be running — see the backend repository README)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 4. Start
+npm run dev
+# → http://localhost:3000
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure (short)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/            # routes: landing, trips, trips/[id], items/add, items/manage,
+│                   # login, register, about, contact
+├── components/     # layout (Navbar, Footer, ThemeToggle), trips (cards, filters,
+│                   # pagination), ai (ChatWidget, GenerateDescription), auth, home sections
+├── hooks/          # useTrips, useTrip, useTripMutations, useChat, useGenerateContent
+├── context/        # ChatContext (global concierge state)
+├── lib/            # api (axios), auth-client (Better Auth), constants, roles
+└── types/          # shared TypeScript types
+```

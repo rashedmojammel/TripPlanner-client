@@ -1,6 +1,6 @@
 export const DEMO_CREDS = {
-  email: "demo@tripplanner.com",
-  password: "Demo1234!",
+  email: "demo1@gmail.com",
+  password: "demo1@gmail.com",
 };
 
 export const NAV_PUBLIC = [

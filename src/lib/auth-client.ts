@@ -1,9 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 import { inferAdditionalFields, adminClient } from "better-auth/client/plugins";
 
-const RAW =
-  process.env.BETTER_AUTH_URL ?? "http://localhost:5000/api";
-
+const RAW = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
 const CLEAN = RAW.trim().replace(/^["']|["']$/g, "").replace(/\/+$/, "");
 const SERVER = CLEAN.replace(/\/api$/, "");
 

@@ -2,23 +2,28 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { ChatWidget } from "@/components/ai/ChatWidget";
-// import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata: Metadata = {
   title: "TripPlanner — AI-Powered Travel Platform",
   description:
-    "Discover curated trips across Bangladesh and beyond, with an AI travel concierge to help you choose.",
+    "Discover curated trips across Bangladesh and beyond, with an AI travel concierge to help you choose the perfect trip for your budget and dates.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-white text-slate-800 antialiased">
+    <html lang="en" suppressHydrationWarning>
+      <body className="flex min-h-screen flex-col bg-white text-slate-800 antialiased transition-colors dark:bg-slate-950 dark:text-slate-200">
         <Providers>
           <Navbar />
-          <main>{children}</main>
-          <ChatWidget></ChatWidget>
+          <main className="flex-1">{children}</main>
+          {/* <Footer /> */}
+          <ChatWidget />
         </Providers>
       </body>
     </html>

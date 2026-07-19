@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, signOut } from "@/lib/auth-client";
 import { NAV_PUBLIC, NAV_PRIVATE } from "@/lib/constants";
+import { ThemeToggle } from "./ThemeToggle";
 import { Bars, Xmark } from "@gravity-ui/icons";
 import { EASE } from "@/lib/motion";
 
@@ -35,8 +36,8 @@ export function Navbar() {
     <header
       className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
         scrolled
-          ? "border-slate-200 bg-white/90 shadow-sm backdrop-blur-md"
-          : "border-transparent bg-white/70 backdrop-blur-sm"
+          ? "border-slate-200 bg-white/90 shadow-sm backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90"
+          : "border-transparent bg-white/70 backdrop-blur-sm dark:bg-slate-950/70"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
@@ -53,7 +54,7 @@ export function Navbar() {
                 key={l.href}
                 href={l.href}
                 className={`relative py-1 text-sm font-medium transition-colors duration-150 hover:text-primary ${
-                  active ? "text-primary" : "text-slate-600"
+                  active ? "text-primary" : "text-slate-600 dark:text-slate-300"
                 }`}
               >
                 {l.label}
@@ -68,14 +69,16 @@ export function Navbar() {
             );
           })}
 
+          <ThemeToggle />
+
           {isPending ? null : session ? (
             <div className="flex items-center gap-3">
-              <span className="text-sm text-slate-500">
+              <span className="text-sm text-slate-500 dark:text-slate-400">
                 Hi, {session.user.name.split(" ")[0]}
               </span>
               <button
                 onClick={handleLogout}
-                className="cursor-pointer rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-200"
+                className="cursor-pointer rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
               >
                 Logout
               </button>
@@ -92,22 +95,25 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="cursor-pointer text-slate-700 md:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
-        >
-          <motion.span
-            key={open ? "close" : "open"}
-            initial={{ opacity: 0, rotate: -45 }}
-            animate={{ opacity: 1, rotate: 0 }}
-            transition={{ duration: 0.2 }}
-            className="block"
+        {/* Mobile: theme toggle + menu button */}
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          <button
+            className="cursor-pointer p-1 text-slate-700 dark:text-slate-300"
+            onClick={() => setOpen(!open)}
+            aria-label="Menu"
           >
-            {open ? <Xmark className="h-5 w-5" /> : <Bars className="h-5 w-5" />}
-          </motion.span>
-        </button>
+            <motion.span
+              key={open ? "close" : "open"}
+              initial={{ opacity: 0, rotate: -45 }}
+              animate={{ opacity: 1, rotate: 0 }}
+              transition={{ duration: 0.2 }}
+              className="block"
+            >
+              {open ? <Xmark className="h-5 w-5" /> : <Bars className="h-5 w-5" />}
+            </motion.span>
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
@@ -118,7 +124,7 @@ export function Navbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: EASE }}
-            className="overflow-hidden border-t border-slate-200 bg-white md:hidden"
+            className="overflow-hidden border-t border-slate-200 bg-white md:hidden dark:border-slate-800 dark:bg-slate-950"
           >
             <div className="px-4 py-3">
               {links.map((l) => (
@@ -127,7 +133,9 @@ export function Navbar() {
                   href={l.href}
                   onClick={() => setOpen(false)}
                   className={`block py-2 text-sm font-medium ${
-                    pathname === l.href ? "text-primary" : "text-slate-700"
+                    pathname === l.href
+                      ? "text-primary"
+                      : "text-slate-700 dark:text-slate-300"
                   }`}
                 >
                   {l.label}

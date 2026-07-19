@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #0ea5e9;
   --color-primary-dark: #0284c7;

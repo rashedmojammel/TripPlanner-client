@@ -12,6 +12,7 @@ export interface GenerateInput {
 }
 
 export interface GeneratedContent {
+  title: string;
   shortDescription: string;
   fullDescription: string;
 }

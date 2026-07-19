@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import type { ChatMessage } from "@/types";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
+const API = process.env.BET ?? "http://localhost:5000/api";
 
 const WELCOME: ChatMessage = {
   role: "assistant",
